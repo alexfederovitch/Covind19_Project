@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+}
+
+.nav {
+    height: 50px;
+}
+
+.map-info {
+    height: 400px;
+}
+
+.line-chart-data {
+    width: 33%;
+    float: right;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.data-info {
+    height: 700px;
+    display: flex;
+    justify-content: center;
+}
+
+.country-data {
+    width: 40%;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+  }
+
+.info-flag img {
+    width: 120px;
+    border-radius: 5px;
+}
+
+.info-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c2c2c;
+}
+
+.info-container {
+    width: 200px;
+}
+
+.info-flag {
+    height: 120px;
+    width: 95%;
+    background-size: cover;
+    border-radius: 5px;
+}
+
+.info-confirmed, .info-recovered, .info-deaths {
+    font-size: 16px;
+    margin-top: 5px;
+}
+

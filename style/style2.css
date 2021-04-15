@@ -1,0 +1,67 @@
+.body {
+    margin: 0;
+}
+
+.main {
+    background-color: white;
+    height: 100vh;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.statistic-container .card{
+    background-color: bisque;
+    border-radius: 12px;
+}
+
+.statistic-container .card-body {
+    padding: 1rem;
+}
+
+.map-container {
+    height: 500px;
+    padding: 1rem;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.chart-container {
+    height: 250px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.chart-container .col {
+    background-color: blanchedalmond;
+    display: flex;
+    border-radius: 10px;
+}
+
+.line-container {
+    height: 100%;
+}
+
+.pie-container {
+    height: 100%;
+}
+
+.title-container {
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+.title-container h1 {
+    margin-top: -10px;
+    color: #fc3c3c;
+}

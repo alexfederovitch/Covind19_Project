@@ -63,8 +63,9 @@ body {
     border-radius: 5px;
 }
 
-.info-confirmed, .info-recovered, .info-deaths {
-    font-size: 16px;
+.info-confirmed, .info-recovered, .info-deaths .info-vaccinated{
+    font-size: 14px;
     margin-top: 5px;
+    margin-bottom: 5px;
 }
 

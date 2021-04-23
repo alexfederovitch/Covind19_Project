@@ -1,11 +1,17 @@
 let map;
+let globalCoronaData;
+let mapCircles = [];
+let vaccinations = 0;
+let vaccinatedCard;
+let radius;
 
 //Runs the getCountryData() function as the page loads
 window.onload = () => {
-    getCountryData();
     getCountryData2();
-    // getHistoricalAll();
     getHistVac();
+    getStateData();
+    getWorldCoronaData();
+    getVaccinationTotals();
 }
 
 //Initializes the map
@@ -20,25 +26,32 @@ function initMap() {
     zoom: 3,
     styles: mapStyle,
   });
-
 }
 
+//Selecting caseID for 
+const cardSelection = (caseID) => {
+    clearMap();
+    showData2(globalCoronaData, caseID);
+}
 
-//Grabs the data from the API for each country
-const getCountryData = () => {
+const clearMap = () => {
+    for(let circle of mapCircles) {
+        circle.setMap(null);
+    }
+}
 
-    //Use "http://localhost:3000/countries" to use custom API
-    fetch("https://disease.sh/v3/covid-19/countries")
+const getStateData = () => {
+
+    fetch("https://disease.sh/v3/covid-19/states?yesterday=true&allowNull=true")
     .then((response)=>{
         return response.json();
-    }).then((data)=> {
-        console.log(data);
-        // showData(data);
-        // showDataInTable(data);
+    }).then((pieData)=> {
+        // console.log(pieData);
     });
 
 }
 
+//Use "http://localhost:3000/countries" to use custom API
 //Remake of API  call for country data that includes vaccine data for every country
 const getCountryData2 = () => {
         Promise.all([fetch("https://disease.sh/v3/covid-19/countries"), 
@@ -47,15 +60,16 @@ const getCountryData2 = () => {
         return Promise.all(responses.map(function (response) {
         return response.json();
     }));
-    }).then(function(data) {
-        // console.log(data[0]);
-        // console.log(data[1]);
-        let data2 = data;
+    }).then(function(data2) {
+        // console.log(data2[0]);
+        // console.log(data2[1]);
+        globalCoronaData = data2;
+        console.log(globalCoronaData);
         showData2(data2);
         buildPieChart();
+        // return globalCoronaData;
     });
 }
-
 
 //Builds data for the historical data chart
 const buildChartData = (data) => {
@@ -201,11 +215,46 @@ const getHistVac = () => {
     });
 }
 
-const showData2 = (data2) => {
-    console.log(data2[0]);
-    console.log(data2[1][0].timeline);
+const getWorldCoronaData = () => {
+    fetch("https://disease.sh/v2/all")
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+        cardFill(data);
+    })
+}
 
-    let vaccinations = 0;
+const getVaccinationTotals = () => {
+    fetch("https://disease.sh/v3/covid-19/vaccine/coverage?lastdays=30")
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+        vCardData(data);
+    })
+}
+
+const vCardData = (data) => {
+    for(let date in data) {
+        vaccinatedCard = data[date];
+    }
+    vaccinatedCard = numeral(vaccinatedCard).format('0,0');
+    document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;
+}
+
+const cardFill = (cardData) => {
+    let totalCard = numeral(cardData.cases).format('0,0');
+    let activeCard = numeral(cardData.active).format('0,0');
+    let recoveredCard = numeral(cardData.recovered).format('0,0');
+    let deathsCard = numeral(cardData.deaths).format('0,0');
+    document.querySelector('.cases-text').innerHTML = totalCard;
+    document.querySelector('.active-text').innerHTML = activeCard;
+    document.querySelector('.recovered-text').innerHTML = recoveredCard;
+    document.querySelector('.deaths-text').innerHTML = deathsCard;
+}
+
+const showData2 = (data2, caseID="cases") => {
+    // console.log(data2[0]);
+    // console.log(data2[1][0].timeline);
 
     //Loops through the data for the entire [data] object and displays the data
     data2[0].map((country) => {
@@ -214,15 +263,12 @@ const showData2 = (data2) => {
         Object.entries(data2[1]).forEach((entry) => {
             const [key, vaccine] = entry;
             if (vaccine.country === country.country) {
-                console.log(country.country)
-                console.log(vaccine.country)
                 //Getting latest date from the API
                 for (let date in entry[1].timeline) {
                     vaccinations = entry[1].timeline[date];
                 }
                 return vaccinations;
             }
-    
         });
 
         //Defines the center for each country on the map
@@ -231,17 +277,37 @@ const showData2 = (data2) => {
             lng: country.countryInfo.long
         }
 
+        //Setting radius variable
+        radius = Math.sqrt(country[caseID]) * 200;
+        //Changing the radius variable for vaccinations
+        if (caseID === 'vaccinated') {
+            radius = Math.sqrt(vaccinations) * 100;
+        }
+
+        //Object to change the colors of the map circles
+        let caseIDColors = {
+            cases: "#FF0000",
+            active: "#008000",
+            recovered: "#9d80fe",
+            deaths: "#000000",
+            vaccinated: "#0000FF"
+        }
+
+
         // Creates the circle for each country.  The size of each circle is determined by the number of cases each country has
-        const countryCircle = new google.maps.Circle({
-            strokeColor: "#FF0000",
+        let countryCircle = new google.maps.Circle({
+            strokeColor: caseIDColors[caseID],
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: "#FF0000",
+            fillColor: caseIDColors[caseID],
             fillOpacity: 0.35,
             map,
             center: countryCenter,
-            radius: Math.sqrt(country.cases) * 200,
+            radius: radius
         });
+
+        //Pushes the map circles for circle recreation
+        mapCircles.push(countryCircle);
 
         //Creates Div blocks to display the data for the InfoWindow popup
         let cases = numeral(country.cases).format('0,0');
@@ -288,74 +354,6 @@ const showData2 = (data2) => {
     
 }
 
-//Displays data in the map
-const showData = (data) => {
-    
-    //Loops through the data for the entire [data] object and displays the data
-    data.map((country) => {
-
-        //Defines the center for each country on the map
-        let countryCenter = {
-            lat: country.countryInfo.lat,
-            lng: country.countryInfo.long
-        }
-
-        // Creates the circle for each country.  The size of each circle is determined by the number of cases each country has
-        const countryCircle = new google.maps.Circle({
-            strokeColor: "#FF0000",
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: "#FF0000",
-            fillOpacity: 0.35,
-            map,
-            center: countryCenter,
-            radius: Math.sqrt(country.cases) * 200,
-
-            
-        });
-
-        //Creates Div blocks to display the data for the InfoWindow popup
-        let cases = numeral(country.cases).format('0,0');
-        let recovered = numeral(country.recovered).format('0,0');
-        let deaths = numeral(country.deaths).format('0,0');
-        let html = `
-        <div class="info-container">
-            <div class="info-flag" style="background-image: url(${country.countryInfo.flag})">
-            </div>
-            <div class="info-name">
-                ${country.country}
-            </div>
-            <div class="info-confirmed">
-               Total Cases: ${cases}
-            </div>
-            <div class="info-recovered">
-               Recovered: ${recovered}
-            </div>
-            <div class="info-deaths">
-               Deaths: ${deaths}
-            </div>
-        </div>
-        `
-
-        //Creates the infoWindow object to display Total Cases, Recovered, and Death upon mouseover of the respective circle
-        const infoWindow = new google.maps.InfoWindow({
-            content: html, 
-            position: countryCircle.center
-        });
-
-        google.maps.event.addListener(countryCircle, 'mouseover', function() {
-            infoWindow.open(map);
-        });
-
-        google.maps.event.addListener(countryCircle, 'mouseout', function() {
-            infoWindow.close();
-        });
-
-    });
-
-    
-}
-
 //Function cycles through the data object to create a table displaying country
 const showDataInTable = (data) => {
 
@@ -380,4 +378,3 @@ const showDataInTable = (data) => {
 
     document.getElementById('table-data').innerHTML = html;
 }
-

@@ -38,42 +38,42 @@
                 </div>
                 <div class="row statistic-container">
                     <div class="col">
-                        <div class="card">
+                        <div class="card" onclick="cardSelection('cases')">
                             <div class="card-body">
                               <h5 class="card-title">Total Cases</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">1000000</h6>
+                              <h6 class="card-subtitle mb-2 cases-text" id="total">-----</h6>
                             </div>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card">
+                        <div class="card" id="active" onclick="cardSelection('active')">
                             <div class="card-body">
                               <h5 class="card-title">Active Cases</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">1000000</h6>
+                              <h6 class="card-subtitle mb-2 active-text">-----</h6>
                             </div>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card">
+                        <div class="card" id="recovered" onclick="cardSelection('recovered')">
                             <div class="card-body">
                               <h5 class="card-title">Recovered</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">1000000</h6>
+                              <h6 class="card-subtitle mb-2 recovered-text">-----</h6>
                             </div>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card">
+                        <div class="card" id="deaths" onclick="cardSelection('deaths')">
                             <div class="card-body">
                               <h5 class="card-title">Deaths</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">1000000</h6>
+                              <h6 class="card-subtitle mb-2 deaths-text">-----</h6>
                             </div>
                         </div>
                     </div>
                     <div class="col">
-                        <div class="card">
+                        <div class="card" id="vaccinated" onclick="cardSelection('vaccinated')">
                             <div class="card-body">
                               <h5 class="card-title">Vaccinated</h5>
-                              <h6 class="card-subtitle mb-2 text-muted">1000000</h6>
+                              <h6 class="card-subtitle mb-2 vaccinated-text">-----</h6>
                             </div>
                         </div>
                     </div>

@@ -70,6 +70,7 @@ const getCountryData2 = () => {
         globalCoronaData = data2;
         console.log(globalCoronaData);
         showData2(data2);
+        showDataInTable(data2[0]);
         buildPieChart();
     });
 }
@@ -184,6 +185,9 @@ const buildLineChart = (chartValues) => {
         scales: {
             xAxes: [{
                 type: "time",
+                gridLines: {
+                    display:false
+                },
                 time: {
                     format: timeFormat,
                     tooltipFormat: 'll'
@@ -193,7 +197,7 @@ const buildLineChart = (chartValues) => {
                 ticks: {
                     
                     callback: function(value, index, values) {
-                        return numeral(value).format('0,0');
+                        return numeral(value).format('0.0a');
                     }
                 }
             }]
@@ -263,15 +267,18 @@ const cardFill = (cardData) => {
     let activeCard = numeral(cardData.active).format('0,0');
     let recoveredCard = numeral(cardData.recovered).format('0,0');
     let deathsCard = numeral(cardData.deaths).format('0,0');
-    let perMillion = numeral(cardData.casesPerOneMillion).format('0,0') + " PMP";
+    let perMillion = numeral(cardData.casesPerOneMillion).format('0,0');
+    let casesToday = numeral(cardData.todayCases).format('+0,0');
+    let recoveredToday = numeral(cardData.todayRecovered).format('+0,0');
+    let deathsToday = numeral(cardData.todayDeaths).format('+0,0');
     document.querySelector('.cases-text').innerHTML = totalCard;
     document.querySelector('.active-text').innerHTML = activeCard;
     document.querySelector('.recovered-text').innerHTML = recoveredCard;
     document.querySelector('.deaths-text').innerHTML = deathsCard;
-    document.querySelector('.per-million').innerHTML = perMillion;
-    document.querySelector('.cases-today').innerHTML = numeral(cardData.todayCases).format('+0,0');
-    document.querySelector('.recovered-today').innerHTML = numeral(cardData.todayRecovered).format('+0,0');
-    document.querySelector('.deaths-today').innerHTML = numeral(cardData.todayDeaths).format('+0,0');
+    document.querySelector('.per-million').innerHTML = `${perMillion} PMP`;
+    document.querySelector('.cases-today').innerHTML = casesToday;
+    document.querySelector('.recovered-today').innerHTML = recoveredToday;
+    document.querySelector('.deaths-today').innerHTML = deathsToday;
 }
 
 //Shows data in the map area

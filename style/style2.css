@@ -1,5 +1,7 @@
 .body {
     margin: 0;
+    /* background-color: #f5f6fa; */
+    background-color: white;
 }
 
 .main {
@@ -21,6 +23,7 @@
     background-color: bisque;
     border-radius: 12px;
     opacity: 0.8;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .card:hover {
@@ -29,6 +32,27 @@
 
 .statistic-container .card-body {
     padding: 1rem;
+}
+
+.statistic-container .card-body h6{
+    font-size: 12px;
+    font-weight: 400;
+}
+
+#total .card-subtitle {
+    color: #FF0000;
+}
+
+#active .card-subtitle {
+    color: #008000;
+}
+
+#recovered .card-subtitle {
+    color: #9d80fe;
+}
+
+#vaccinated .card-subtitle {
+    color: #0000FF;
 }
 
 .map-container {
@@ -43,6 +67,7 @@
 }
 
 .chart-container {
+    position: relative;
     height: 250px;
     margin-left: 5px;
     margin-right: 5px;
@@ -71,7 +96,7 @@
 
 }
 
-.title-container h1 {
+.title-container h2 {
     margin-top: -10px;
     color: #fc3c3c;
 }

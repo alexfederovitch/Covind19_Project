@@ -2,6 +2,7 @@ let map;
 let globalCoronaData;
 let mapCircles = [];
 let vaccinations = 0;
+let vaccinationsToday = 0;
 let vaccinatedCard;
 let radius;
 
@@ -171,6 +172,8 @@ const buildLineChart = (chartValues) => {
 
     // Configuration options go here
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         tooltips: {
             mode: 'index',
             intersect: false
@@ -234,13 +237,22 @@ const getVaccinationTotals = () => {
 }
 
 const vCardData = (data) => {
+    const vaccineDates = [];
+
     for(let date in data) {
         vaccinatedCard = data[date];
+        vaccineDates.push(vaccinatedCard);
     }
+
+    vaccinationsToday = vaccineDates[29] - vaccineDates[28];
+
     vaccinatedCard = numeral(vaccinatedCard).format('0,0');
+    vaccinationsToday = numeral(vaccinationsToday).format('0,0');
     document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;
+    document.querySelector('.vaccinated-today').innerHTML = "+" + vaccinationsToday;
 }
 
+//Information for the data cards
 const cardFill = (cardData) => {
     let totalCard = numeral(cardData.cases).format('0,0');
     let activeCard = numeral(cardData.active).format('0,0');
@@ -250,8 +262,13 @@ const cardFill = (cardData) => {
     document.querySelector('.active-text').innerHTML = activeCard;
     document.querySelector('.recovered-text').innerHTML = recoveredCard;
     document.querySelector('.deaths-text').innerHTML = deathsCard;
+    document.querySelector('.per-million').innerHTML = numeral(cardData.casesPerOneMillion).format('0,0') + " PMP";
+    document.querySelector('.cases-today').innerHTML = "+" + numeral(cardData.todayCases).format('0,0');
+    document.querySelector('.recovered-today').innerHTML = "+" + numeral(cardData.todayRecovered).format('0,0');
+    document.querySelector('.deaths-today').innerHTML = "+" + numeral(cardData.todayDeaths).format('0,0');
 }
 
+//Shows data in the map area
 const showData2 = (data2, caseID="cases") => {
     // console.log(data2[0]);
     // console.log(data2[1][0].timeline);

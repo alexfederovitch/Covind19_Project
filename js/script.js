@@ -41,6 +41,8 @@ const clearMap = () => {
     }
 }
 
+
+//API call for US State data
 const getStateData = () => {
 
     fetch("https://disease.sh/v3/covid-19/states?yesterday=true&allowNull=true")
@@ -64,11 +66,11 @@ const getCountryData2 = () => {
     }).then(function(data2) {
         // console.log(data2[0]);
         // console.log(data2[1]);
+        //Adding data to globalCoronaData to use for case selector variable
         globalCoronaData = data2;
         console.log(globalCoronaData);
         showData2(data2);
         buildPieChart();
-        // return globalCoronaData;
     });
 }
 
@@ -218,6 +220,7 @@ const getHistVac = () => {
     });
 }
 
+//API for world Coronavirus data for data cards
 const getWorldCoronaData = () => {
     fetch("https://disease.sh/v2/all")
     .then((response)=>{
@@ -227,6 +230,7 @@ const getWorldCoronaData = () => {
     })
 }
 
+//API for world vaccination data for vaccination data card
 const getVaccinationTotals = () => {
     fetch("https://disease.sh/v3/covid-19/vaccine/coverage?lastdays=30")
     .then((response)=>{
@@ -248,9 +252,9 @@ const vCardData = (data) => {
     vaccinationsToday = vaccineDates[29] - vaccineDates[28];
 
     vaccinatedCard = numeral(vaccinatedCard).format('0,0');
-    vaccinationsToday = numeral(vaccinationsToday).format('0,0');
+    vaccinationsToday = numeral(vaccinationsToday).format('+0,0');
     document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;
-    document.querySelector('.vaccinated-today').innerHTML = "+" + vaccinationsToday;
+    document.querySelector('.vaccinated-today').innerHTML = vaccinationsToday;
 }
 
 //Information for the data cards
@@ -259,14 +263,15 @@ const cardFill = (cardData) => {
     let activeCard = numeral(cardData.active).format('0,0');
     let recoveredCard = numeral(cardData.recovered).format('0,0');
     let deathsCard = numeral(cardData.deaths).format('0,0');
+    let perMillion = numeral(cardData.casesPerOneMillion).format('0,0') + " PMP";
     document.querySelector('.cases-text').innerHTML = totalCard;
     document.querySelector('.active-text').innerHTML = activeCard;
     document.querySelector('.recovered-text').innerHTML = recoveredCard;
     document.querySelector('.deaths-text').innerHTML = deathsCard;
-    document.querySelector('.per-million').innerHTML = numeral(cardData.casesPerOneMillion).format('0,0') + " PMP";
-    document.querySelector('.cases-today').innerHTML = "+" + numeral(cardData.todayCases).format('0,0');
-    document.querySelector('.recovered-today').innerHTML = "+" + numeral(cardData.todayRecovered).format('0,0');
-    document.querySelector('.deaths-today').innerHTML = "+" + numeral(cardData.todayDeaths).format('0,0');
+    document.querySelector('.per-million').innerHTML = perMillion;
+    document.querySelector('.cases-today').innerHTML = numeral(cardData.todayCases).format('+0,0');
+    document.querySelector('.recovered-today').innerHTML = numeral(cardData.todayRecovered).format('+0,0');
+    document.querySelector('.deaths-today').innerHTML = numeral(cardData.todayDeaths).format('+0,0');
 }
 
 //Shows data in the map area
@@ -297,6 +302,7 @@ const showData2 = (data2, caseID="cases") => {
 
         //Setting radius variable
         radius = Math.sqrt(country[caseID]) * 200;
+
         //Changing the radius variable for vaccinations
         if (caseID === 'vaccinated') {
             radius = Math.sqrt(vaccinations) * 100;

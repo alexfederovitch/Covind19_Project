@@ -236,6 +236,7 @@ const getVaccinationTotals = () => {
     })
 }
 
+//Information for the Vaccination card data
 const vCardData = (data) => {
     const vaccineDates = [];
 
@@ -299,6 +300,10 @@ const showData2 = (data2, caseID="cases") => {
         //Changing the radius variable for vaccinations
         if (caseID === 'vaccinated') {
             radius = Math.sqrt(vaccinations) * 100;
+        }
+
+        if (caseID === 'deaths') {
+            radius = Math.sqrt(country['deaths']) * 1500;
         }
 
         //Object to change the colors of the map circles

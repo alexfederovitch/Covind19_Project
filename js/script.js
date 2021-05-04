@@ -26,6 +26,7 @@ function initMap() {
     },
     zoom: 3,
     styles: mapStyle,
+    streetViewControl: false,
   });
 }
 

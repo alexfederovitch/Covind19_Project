@@ -241,6 +241,7 @@ const getVaccinationTotals = () => {
         return response.json()
     }).then((data)=>{
         vCardData(data);
+        console.log(data);
     })
 }
 
@@ -253,11 +254,11 @@ const vCardData = (data) => {
         vaccineDates.push(vaccinatedCard);
     }
 
-    vaccinationsToday = vaccineDates[29] - vaccineDates[28];
+    vaccinationsToday = vaccineDates[28] - vaccineDates[27];
 
-    // console.log(vaccineDates[29]);
-    // console.log(vaccineDates[28]);
-    // console.log(vaccineDates[27]);
+    console.log(vaccineDates[29]);
+    console.log(vaccineDates[28]);
+    console.log(vaccineDates[27]);
     vaccinatedCard = numeral(vaccinatedCard).format('0,0');
     vaccinationsToday = numeral(vaccinationsToday).format('+0,0');
     document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;

@@ -71,7 +71,7 @@ const getCountryData2 = () => {
         console.log(globalCoronaData);
         showData2(data2);
         showDataInTable(data2[0]);
-        buildPieChart();
+        // buildPieChart();
     });
 }
 
@@ -255,6 +255,9 @@ const vCardData = (data) => {
 
     vaccinationsToday = vaccineDates[29] - vaccineDates[28];
 
+    // console.log(vaccineDates[29]);
+    // console.log(vaccineDates[28]);
+    // console.log(vaccineDates[27]);
     vaccinatedCard = numeral(vaccinatedCard).format('0,0');
     vaccinationsToday = numeral(vaccinationsToday).format('+0,0');
     document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;

@@ -65,20 +65,19 @@
     border-radius: 12px;
 }
 
-/* .chart-container {
+.chart-container {
     position: relative;
     height: 250px;
     margin-left: 5px;
     margin-right: 5px;
-} */
+}
 
 .chart-container {
     display: flex;
     border-radius: 10px;
     margin-left: 0;
     margin-right: 0;
-    position: relative;
-    height: 250px;
+    
 }
 
 .line-container {
@@ -151,3 +150,10 @@
     font-size: 12px;
     font-weight: 400;
 }
+
+@media only screen and (max-width: 768px) {
+    .xs-column-reverse {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+  }

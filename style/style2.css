@@ -57,6 +57,7 @@
 .map-container {
     height: 600px;
     padding: 0rem;
+    margin-bottom: 10px;
 }
 
 #map {
@@ -126,6 +127,8 @@
 }
 
 .side-panel-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
     border-bottom-left-radius: 30px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
@@ -150,6 +153,7 @@
     font-size: 12px;
     font-weight: 400;
 }
+
 
 /* @media only screen and (max-width: 768px) {
     .xs-column-reverse {

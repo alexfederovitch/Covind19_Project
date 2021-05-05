@@ -5,6 +5,11 @@ let vaccinations = 0;
 let vaccinationsToday = 0;
 let vaccinatedCard;
 let radius;
+const selectDefault = {
+    name: "Worldwide",
+    value: "",
+    selected: true
+}
 
 //Runs the getCountryData() function as the page loads
 window.onload = () => {
@@ -13,6 +18,35 @@ window.onload = () => {
     getStateData();
     getWorldCoronaData();
     getVaccinationTotals();
+}
+
+const setCountrySearch = (data) => {
+    let countryList = [];
+    countryList.push(selectDefault);
+    data.forEach((data) => {
+        countryList.push({
+            name: data.country,
+            value: data.countryInfo.iso3
+        })
+    })
+    uiDropdown(countryList);
+}
+
+//Initializes dropdown for search menu.
+const uiDropdown = (countryList) => {
+    $('.ui.dropdown').dropdown({
+        clearable: true,
+        values: countryList,
+        onChange: function(value, text) {
+            if(value !== selectDefault.value) {
+                getCountrySearch(value);
+                vCountrySearch(value);
+            } else {
+                getWorldCoronaData();
+                getVaccinationTotals();
+            }
+        }
+    });
 }
 
 //Initializes the map
@@ -55,6 +89,27 @@ const getStateData = () => {
 
 }
 
+const getCountrySearch = (countryIso) => {
+    const url = "https://disease.sh/v3/covid-19/countries/" + countryIso;
+    fetch(url)
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+        cardFill(data);
+    })
+}
+
+const vCountrySearch = (vCountryIso) => {
+    const url = "https://disease.sh/v3/covid-19/vaccine/coverage/countries/" + vCountryIso + "?lastdays=30&fullData=false";
+    fetch(url)
+    .then((response)=>{
+        return response.json()
+    }).then((data)=>{
+        vCardData(data);
+        console.log(data);
+    })
+}
+
 //Use "http://localhost:3000/countries" to use custom API
 //Remake of API  call for country data that includes vaccine data for every country
 const getCountryData2 = () => {
@@ -65,14 +120,12 @@ const getCountryData2 = () => {
         return response.json();
     }));
     }).then(function(data2) {
-        // console.log(data2[0]);
-        // console.log(data2[1]);
         //Adding data to globalCoronaData to use for case selector variable
         globalCoronaData = data2;
         console.log(globalCoronaData);
         showData2(data2);
         showDataInTable(data2[0]);
-        // buildPieChart();
+        setCountrySearch(data2[0]);
     });
 }
 
@@ -249,18 +302,38 @@ const getVaccinationTotals = () => {
 //Information for the Vaccination card data
 const vCardData = (data) => {
     const vaccineDates = [];
+    console.log(data)
+
+    if(data.timeline === data.timeline) {
+        for(let date in data.timeline) {
+            vaccinatedCard = data.timeline[date];
+            vaccineDates.push(vaccinatedCard);
+            // console.log(vaccinatedCard)
+        }
+        vaccinationsToday = vaccineDates[28] - vaccineDates[27];
+
+        vaccinatedCard = numeral(vaccinatedCard).format('0,0');
+        console.log(vaccinatedCard);
+        vaccinationsToday = numeral(vaccinationsToday).format('+0,0');
+        document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;
+        document.querySelector('.vaccinated-today').innerHTML = vaccinationsToday;
+    } else if (data === data) {
+        console.log("Hello")
+    }
 
     for(let date in data) {
         vaccinatedCard = data[date];
         vaccineDates.push(vaccinatedCard);
     }
 
+    vaccinatedCard = vaccineDates[29];
     vaccinationsToday = vaccineDates[28] - vaccineDates[27];
 
     console.log(vaccineDates[29]);
     console.log(vaccineDates[28]);
     console.log(vaccineDates[27]);
     vaccinatedCard = numeral(vaccinatedCard).format('0,0');
+    // console.log(vaccinatedCard);
     vaccinationsToday = numeral(vaccinationsToday).format('+0,0');
     document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;
     document.querySelector('.vaccinated-today').innerHTML = vaccinationsToday;

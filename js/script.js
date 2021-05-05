@@ -99,6 +99,7 @@ const getCountrySearch = (countryIso) => {
     })
 }
 
+//API call for the Vaccine statistics for individual countries
 const vCountrySearch = (vCountryIso) => {
     const url = "https://disease.sh/v3/covid-19/vaccine/coverage/countries/" + vCountryIso + "?lastdays=30&fullData=false";
     fetch(url)
@@ -106,7 +107,7 @@ const vCountrySearch = (vCountryIso) => {
         return response.json()
     }).then((data)=>{
         vCardData(data);
-        console.log(data);
+        // console.log(data);
     })
 }
 
@@ -295,14 +296,14 @@ const getVaccinationTotals = () => {
         return response.json()
     }).then((data)=>{
         vCardData(data);
-        console.log(data);
+        // console.log(data);
     })
 }
 
 //Information for the Vaccination card data
 const vCardData = (data) => {
     const vaccineDates = [];
-    console.log(data)
+    // console.log(data)
 
     if(data.timeline === data.timeline) {
         for(let date in data.timeline) {
@@ -313,12 +314,10 @@ const vCardData = (data) => {
         vaccinationsToday = vaccineDates[28] - vaccineDates[27];
 
         vaccinatedCard = numeral(vaccinatedCard).format('0,0');
-        console.log(vaccinatedCard);
+        // console.log(vaccinatedCard);
         vaccinationsToday = numeral(vaccinationsToday).format('+0,0');
         document.querySelector('.vaccinated-text').innerHTML = vaccinatedCard;
         document.querySelector('.vaccinated-today').innerHTML = vaccinationsToday;
-    } else if (data === data) {
-        console.log("Hello")
     }
 
     for(let date in data) {
@@ -329,9 +328,9 @@ const vCardData = (data) => {
     vaccinatedCard = vaccineDates[29];
     vaccinationsToday = vaccineDates[28] - vaccineDates[27];
 
-    console.log(vaccineDates[29]);
-    console.log(vaccineDates[28]);
-    console.log(vaccineDates[27]);
+    // console.log(vaccineDates[29]);
+    // console.log(vaccineDates[28]);
+    // console.log(vaccineDates[27]);
     vaccinatedCard = numeral(vaccinatedCard).format('0,0');
     // console.log(vaccinatedCard);
     vaccinationsToday = numeral(vaccinationsToday).format('+0,0');

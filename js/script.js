@@ -89,6 +89,7 @@ const getStateData = () => {
 
 }
 
+//Call of country API for search bar functionality for individual countries
 const getCountrySearch = (countryIso) => {
     const url = "https://disease.sh/v3/covid-19/countries/" + countryIso;
     fetch(url)
